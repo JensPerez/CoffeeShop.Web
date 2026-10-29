@@ -1,0 +1,79 @@
+@model KoffieDetailVm
+
+@{
+    ViewData["Title"] = "KoffieDetail";
+}
+
+<div class="container my-5">
+    <!-- Terugknop naar overzicht -->
+    <div class="mb-4">
+        <a asp-controller="Koffie" asp-action="Index" class="btn btn-outline-coffee">
+            &larr; Terug naar de menukaart
+        </a>
+    </div>
+
+    <div class="row g-5 align-items-center">
+        <!-- Linkerkolom: Grote foto en beschrijving -->
+        <div class="col-lg-6">
+            <div class="card shadow border-0">
+                <img src="@Model.ImageUrl" alt="@Model.Naam" class="card-img-top rounded-top"
+                     style="height: 400px; object-fit: cover;">
+                <div class="card-body p-4">
+                    <h4 class="fw-bold mb-3">Over deze koffie</h4>
+                    <p class="text-muted lh-base">@Model.Beschrijving</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rechterkolom: Naam, Prijs en Ingrediëntenlijst met Categorieën -->
+        <div class="col-lg-6">
+            <div class="p-4 bg-cream rounded-3 shadow-sm">
+                <span class="badge bg-coffee mb-2">Huisfavoriet</span>
+                <h1 class="display-5 fw-bold text-coffee mb-3">@Model.Naam</h1>
+                <h3 class="text-caramel fw-semibold mb-4">€ 3.40</h3>
+
+                @* Toon deze badge enkel wanneer de koffie vegan is: *@
+                @if(Model.IsVegan)
+                {
+                    <span class="badge bg-success mb-2">Vegan</span>
+                }
+
+                <hr class="my-4">
+
+                <!--
+                    Badge-kleur per categorie:
+                    "Koffiebonen"          => "bg-coffee"
+                    "Melk & Alternatieven" => "bg-light text-dark border"
+                    "Siropen & Smaken"     => "bg-warning text-dark"
+                    "Thee & Kruiden"       => "bg-success"
+                    andere                 => "bg-caramel"
+                -->
+                <h4 class="fw-bold mb-3">Ingrediënten:</h4>
+                <ul class="list-group list-group-flush mb-4 bg-transparent">
+                    @foreach(var ingredient in Model.Ingredienten)
+                    {
+                        <li class="list-group-item bg-transparent d-flex justify-content-between align-items-center py-3">
+                            <!-- Linkerkant: Naam en optioneel vegan icoon netjes naast elkaar -->
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="fw-medium">@ingredient.Naam</span>
+
+                                @if (ingredient.IsVegan)
+                                {
+                                    <span title="Vegan" style="font-size: 0.9rem;">🌱</span>
+                                }
+
+                            </div>
+
+                            <!-- Rechterkant: Categorie badge -->
+                            <span class="badge bg-coffee rounded-pill px-3 py-2">@ingredient.CategorieNaam</span>
+                        </li>
+                    }
+
+
+
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
